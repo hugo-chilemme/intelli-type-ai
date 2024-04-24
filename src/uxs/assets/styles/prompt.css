@@ -6,7 +6,7 @@ body {
 	padding: 0px 0px;
 	overflow: hidden;
 	display: flex;
-	height: 70px;
+	height: 60px;
 
 	flex-direction: column;
 	justify-content: flex-end;
@@ -33,7 +33,6 @@ p {
 	color: #fff;
 	margin: 0 auto;
 	overflow: hidden;
-	height: 50px;
 	
 	display:flex;
 	flex-direction: row;

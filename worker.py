@@ -1,35 +1,29 @@
 import pygetwindow as gw
-from pywinauto import Desktop
+import pyperclip
+import pyautogui 
 import time
 
-def search_text_in_children(element, text):
-	# Vérifier si le texte est présent dans le titre de l'élément
-	if element.window_text():
-		print(f"Texte trouvé dans l'élément : {element.window_text()}")
-		print(f"\tClasse de l'élément : {element._element_info}")
+# Get the active window
+active_window = gw.getActiveWindow()
 
-	# Parcourir tous les enfants de l'élément
-	for child in element.children():
-		# Appeler récursivement la fonction pour chaque enfant
-		search_text_in_children(child, text)
+# Assuming the text input field is currently focused, you can get the current input
+def get_current_input():
+	try:
+
+		old_clipboard = pyperclip.paste()
+		pyperclip.copy('')  # Clear the clipboard
+		pyautogui.hotkey('ctrl', 'c')  # Copy the selected text to clipboard
+		current_input = pyperclip.paste()  # Retrieve the text from 
+		pyperclip.copy(old_clipboard)  # Restore the clipboard
+	except Exception as e:
+		current_input = ""
+	return current_input
 
 
 try:
-    while True:
-        time.sleep(2)
-        # Spécifier le titre de la fenêtre
-        window_title = gw.getActiveWindow().title
+	# Get the current input from the active element
+	current_input = get_current_input()
+	print(current_input)
 
-        # Se connecter au bureau
-        desktop = Desktop(backend="uia")
-
-        # Trouver la fenêtre par titre
-        window = desktop.window(title=window_title)
-
-        # Rechercher le texte dans les enfants de manière récursive
-        search_text_in_children(window, "votre_texte")
-
-        # Délai d'une seconde
-
-except KeyboardInterrupt:
-    print("Interruption de la boucle.")
+except Exception as e:
+	pass

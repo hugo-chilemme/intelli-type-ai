@@ -1,5 +1,6 @@
 const win = require('active-win');
 const { app, BrowserWindow, globalShortcut, screen, ipcMain } = require('electron');
+const { exec } = require('child_process');
 
 let startTyping = false;
 let valueTyping = '';
@@ -16,6 +17,7 @@ function createWindow({ x, y }) {
     promptWindow = new BrowserWindow({
         width: 375,
         height: 70,
+        resizable: false, // Lock resize
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -56,10 +58,17 @@ app.whenReady().then(() => {
 			if (promptWindow) {
 				promptWindow.close();
 			}
-			startTyping = true;
-
+            exec('python3 ./worker.py', (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error executing worker.py: ${error}`);
+                    return;
+                }
+                console.log(`stdout: ${stdout}`);
+                console.error(`stderr: ${stderr}`);
+                createWindow(screen.getCursorScreenPoint());
+            });
+            
 			// Use the cursor position as needed
-			createWindow(screen.getCursorScreenPoint());
 		}
 	});
 
