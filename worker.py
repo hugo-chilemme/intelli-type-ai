@@ -1,16 +1,35 @@
-import keyboard
-import asyncio
-import websockets
+import pygetwindow as gw
+from pywinauto import Desktop
+import time
 
-async def send_data_to_ws(data):
-	async with websockets.connect('ws://localhost:8623') as websocket:
-		await websocket.send(str(data))
+def search_text_in_children(element, text):
+	# Vérifier si le texte est présent dans le titre de l'élément
+	if element.window_text():
+		print(f"Texte trouvé dans l'élément : {element.window_text()}")
+		print(f"\tClasse de l'élément : {element._element_info}")
 
-def on_key_press(event):
-	print('Touche pressée:', event.name)
-	asyncio.run(send_data_to_ws(event.name))
+	# Parcourir tous les enfants de l'élément
+	for child in element.children():
+		# Appeler récursivement la fonction pour chaque enfant
+		search_text_in_children(child, text)
 
-keyboard.on_press(on_key_press)
 
-# To keep the program running
-keyboard.wait('esc')
+try:
+    while True:
+        time.sleep(2)
+        # Spécifier le titre de la fenêtre
+        window_title = gw.getActiveWindow().title
+
+        # Se connecter au bureau
+        desktop = Desktop(backend="uia")
+
+        # Trouver la fenêtre par titre
+        window = desktop.window(title=window_title)
+
+        # Rechercher le texte dans les enfants de manière récursive
+        search_text_in_children(window, "votre_texte")
+
+        # Délai d'une seconde
+
+except KeyboardInterrupt:
+    print("Interruption de la boucle.")
