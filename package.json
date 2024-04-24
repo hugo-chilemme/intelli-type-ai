@@ -1,0 +1,22 @@
+{
+  "name": "intelli-type-ai",
+  "version": "0.1.0",
+  "description": "AI-Assist: A tool enabling real-time integration of ChatGPT or Copilot into user text input, enhancing productivity.",
+  "main": "index.js",
+  "repository": "https://github.com/hugo-chilemme/intelli-type-ai.git",
+  "author": "Hugo Chilemme <hugo.chilemme@gmail.com>",
+  "license": "MIT License",
+  "devDependencies": {
+    "electron": "^30.0.1"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "active-win": "^8.2.1",
+    "keypress": "^0.2.1",
+    "puppeteer": "^22.7.0",
+    "ref-napi": "^3.0.3",
+    "ref-struct-di": "^1.1.1"
+  }
+}

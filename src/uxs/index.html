@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+	<link defer="" href="https://fonts.googleapis.com/css2?family=Outfit&amp;display=swap" rel="stylesheet">
+	<link defer="" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">	<link rel="stylesheet" type="text/css" href="./assets/styles/prompt.css">
+  </head>
+  <body>
+	<div class="prompt" id="prompt">
+		<input type="text" id="input" placeholder="Ask intelligence what to do">
+		<div class="btn-sent" onclick="ask()">
+			<i class='bx bxs-send'></i>
+		</div>
+	</div>
+	<script src="./assets/scripts/prompt.js"></script>
+	<script>
+		const { ipcRenderer } = require('electron');
+
+// Exemple d'utilisation de ipcRenderer pour envoyer un message à un processus principal
+ipcRenderer.send('message-from-renderer', 'Hello from renderer process!');
+
+// Exemple de réception d'une réponse du processus principal
+ipcRenderer.on('message-from-main', (event, data) => {
+    console.log('Received message from main process:', data);
+});
+	</script>
+  </body>
+</html>
