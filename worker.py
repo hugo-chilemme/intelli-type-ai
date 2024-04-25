@@ -1,16 +1,29 @@
-import keyboard
-import asyncio
-import websockets
+import pygetwindow as gw
+import pyperclip
+import pyautogui 
+import time
 
-async def send_data_to_ws(data):
-	async with websockets.connect('ws://localhost:8623') as websocket:
-		await websocket.send(str(data))
+# Get the active window
+active_window = gw.getActiveWindow()
 
-def on_key_press(event):
-	print('Touche pressée:', event.name)
-	asyncio.run(send_data_to_ws(event.name))
+# Assuming the text input field is currently focused, you can get the current input
+def get_current_input():
+	try:
 
-keyboard.on_press(on_key_press)
+		old_clipboard = pyperclip.paste()
+		pyperclip.copy('')  # Clear the clipboard
+		pyautogui.hotkey('ctrl', 'c')  # Copy the selected text to clipboard
+		current_input = pyperclip.paste()  # Retrieve the text from 
+		pyperclip.copy(old_clipboard)  # Restore the clipboard
+	except Exception as e:
+		current_input = ""
+	return current_input
 
-# To keep the program running
-keyboard.wait('esc')
+
+try:
+	# Get the current input from the active element
+	current_input = get_current_input()
+	print(current_input)
+
+except Exception as e:
+	pass

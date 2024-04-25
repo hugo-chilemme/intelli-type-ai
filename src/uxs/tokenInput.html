@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+	<link defer="" href="https://fonts.googleapis.com/css2?family=Outfit&amp;display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="./assets/styles/prompt.css">
+
+  </head>
+  <body>
+	<h2>Intelli Type AI</h2>
+	<p style="line-height: 1.75">Welcome to Intelli Type AI, the AI that can help you with your daily tasks. You can ask everything to Intelli Type AI, and it will help you with the answer. To start, please enter your token below.</p>
+
+	<div class="token" id="token">
+		<input type="text" id="input" placeholder="Enter your token">
+		<div class="btn-sent">
+			<i class='bx bxs-send'></i>
+		</div>
+	</div>
+	<script>
+		const { ipcRenderer } = require('electron');
+	</script>
+	<script src="./assets/scripts/token.js"></script>
+  </body>
+</html>

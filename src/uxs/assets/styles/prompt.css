@@ -3,15 +3,22 @@
 	--primary-background-color: rgba(61, 87, 234, 0.10);
 }
 body {
-	padding: 0px 0px;
+	padding: 35px;
 	overflow: hidden;
 	display: flex;
-	height: 70px;
 
 	flex-direction: column;
-	justify-content: flex-end;
+
+	height: 100vh;
+	justify-content: center;
 }
 
+body.promptInput {
+	height: 60px;
+	align-items: start;
+	justify-content: flex-end;
+	padding: 0;
+}
 
 * {
 	box-sizing: border-box;
@@ -22,9 +29,34 @@ body {
 	padding: 0;
 }
 
+h2 {
+	color: var(--primary-color);
+	font-size: 24px;
+	font-weight: 700;
+	margin-bottom: 20px;
+}
+
 p {
 	color: #606060;
 	font-size: 13px;
+}
+
+input {
+	width: 100%;
+	padding: 15px 20px;
+	background-color: #F7f7f7;
+	border: none;
+	outline: none;
+	margin-top: 25px;
+	border-radius: 35px;
+	border: 1px solid transparent;
+	transition: 250ms;
+}
+
+input:focus {
+	background-color: var(--primary-background-color);
+	color: var(--primary-color);
+	border: 1px solid var(--primary-color);
 }
 
 .prompt {
@@ -33,7 +65,6 @@ p {
 	color: #fff;
 	margin: 0 auto;
 	overflow: hidden;
-	height: 50px;
 	
 	display:flex;
 	flex-direction: row;

@@ -5,7 +5,6 @@ const loader = `
 `
 
 document.addEventListener('DOMContentLoaded', function() {
-	document.querySelector('input').focus();
 	document.querySelector('input').value = '';
 
 	ipcRenderer.on('typingData', (event, data) => {
