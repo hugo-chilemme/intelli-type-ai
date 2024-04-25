@@ -1,7 +1,11 @@
 const win = require('active-win');
 const { app, BrowserWindow, globalShortcut, screen, ipcMain } = require('electron');
 const { exec } = require('child_process');
-require('dotenv').config()
+const fs = require('fs');
+const path = require('path');
+const openai = require('openai');
+const { generateResponse } = require('./src/openai');
+require('dotenv').config();
 
 const ncp = require('copy-paste');
 const Window = require('./src/Window');
@@ -10,10 +14,19 @@ let startTyping = false;
 let valueTyping = '';
 let promptWindow;
 
+ipcMain.on('setToken', (event, token) => {
+    fs.writeFileSync(path.join(__dirname, '.env'), `OPENAI_API_KEY=${token}`);
+    require('dotenv').config();
+    process.env.OPENAI_API_KEY = token;
+    // Continue with your application logic...
+});
 
-ipcMain.handle('sentResearch', function (event, data) {
+
+ipcMain.on('sentResearch', async (event, data) => {
     console.log(data);
+    generateResponse(data);
     return data;
+
 });
 
 ipcMain.on('close-prompt', function (event, data) {
@@ -25,7 +38,7 @@ ipcMain.on('close-prompt', function (event, data) {
 async function handleStart()
 {
 
-    if (process.env.CHATGPT_TOKEN === undefined)
+    if (process.env.OPENAI_API_KEY === undefined)
     {
 
         return Window.createWindow({_id: 'tokenInput'});
@@ -34,7 +47,7 @@ async function handleStart()
 
 
 
-	globalShortcut.register('Super+C', async () => {
+	globalShortcut.register('Alt+i', async () => {
 		const activeWin = await win();
 
 		if (activeWin && activeWin.title !== 'intelli-type-ai') {
@@ -73,10 +86,3 @@ async function handleStart()
 
 
 app.whenReady().then(handleStart);
-	
-// Quit app when all windows are closed
-app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') {
-		app.quit();
-	}
-});

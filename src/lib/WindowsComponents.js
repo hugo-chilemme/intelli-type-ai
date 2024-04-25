@@ -1,12 +1,22 @@
 
 
 const options = new Map();
+const { screen, app } = require('electron')
+
+let screenWidth = 1920;
+let screenHeight = 1080;
+
+app.whenReady().then(() => {
+	const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+	screenWidth = width;
+	screenHeight = height;
+});
 
 
 options.set('promptInput', {
-	width: '100%',
-	height: '100%',
-	resizable: false,
+	width: screenWidth + 'px',
+	height: screenHeight + 'px',
+	resizable: true,
 	webPreferences: {
 		nodeIntegration: true,
 		contextIsolation: false,
@@ -15,8 +25,8 @@ options.set('promptInput', {
 	titleBarStyle: 'hidden',
 	borderRadius: '35px',
 	transparent: true,
-	alwaysOnTop: true,
-	fullscreen: true
+	alwaysOnTop: false,
+	fullscreen: false
 });
 
 options.set('tokenInput', {
