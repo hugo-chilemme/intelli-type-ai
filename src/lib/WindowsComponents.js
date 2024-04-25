@@ -4,8 +4,8 @@ const options = new Map();
 
 
 options.set('promptInput', {
-	width: 375,
-	height: 70,
+	width: '100%',
+	height: '100%',
 	resizable: false,
 	webPreferences: {
 		nodeIntegration: true,
@@ -15,9 +15,9 @@ options.set('promptInput', {
 	titleBarStyle: 'hidden',
 	borderRadius: '35px',
 	transparent: true,
-	alwaysOnTop: false
-})
-
+	alwaysOnTop: true,
+	fullscreen: true
+});
 
 options.set('tokenInput', {
 	width: 500,

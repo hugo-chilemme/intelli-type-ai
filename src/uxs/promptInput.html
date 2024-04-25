@@ -7,16 +7,87 @@
 	<link defer="" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">	
 	<link rel="stylesheet" type="text/css" href="./assets/styles/prompt.css">
   </head>
+
+  <style>
+
+	.conversations {
+		height: 100%;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+
+		.conversation {
+			display: flex;
+			margin: 10px 0;
+			align-items: center;
+
+			.avatar {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+				overflow: hidden;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+			.message {
+				background-color: #292929;
+				padding: 10px;
+				border-radius: 10px;
+				margin-left: 10px;
+				max-width: 70%;
+				word-wrap: break-word;
+			}
+		
+		}
+	}
+
+
+
+
+  </style>
+
   <body class="promptInput">
-	<div class="prompt" id="prompt">
-		<input type="text" id="input" placeholder="Ask intelligence what to do">
-		<div class="btn-sent" onclick="ask()">
-			<i class='bx bxs-send'></i>
+
+	<div class="container">
+		<div class="conversations">
+			<div class="conversation">
+				<div class="avatar">
+					<img src="https://picsum.photos/200" alt="avatar">
+				</div>
+				<div class="message">
+					<p id="preprompt"></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="prompt" id="prompt">
+			<input type="text" id="input" placeholder="Ask intelligence what to do">
+			<div class="btn-sent" onclick="ask()">
+				<i class='bx bxs-send'></i>
+			</div>
 		</div>
 	</div>
 	<script src="./assets/scripts/prompt.js"></script>
 	<script>
 		const { ipcRenderer } = require('electron');
+
+
+		document.querySelector('body').addEventListener('click', function(e) {
+			console.log(e.target.closest('.container'))
+			if (!e.target.closest('.container'))
+			{
+				ipcRenderer.send('close-prompt');
+				console.log('closed');
+			}
+		});
+
+
+		ipcRenderer.on('onReady', function(event, data) {
+			document.querySelector('#preprompt').textContent = data.text;
+		});
 	</script>
   </body>
 </html>

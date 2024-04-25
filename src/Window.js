@@ -12,7 +12,7 @@ function getWindow(_id)
 }
 
 
-function createWindow({_id, position})
+function createWindow({_id, position, data})
 {
 
 	if (WindowsComponents.has(_id))
@@ -30,6 +30,13 @@ function createWindow({_id, position})
 		Windows.set(_id, window);
 
 		window.loadFile(`./src/uxs/${_id}.html`);
+
+		if (data)
+		{
+			window.webContents.once('did-finish-load', () => {
+				window.webContents.send('onReady', data);
+			});
+		}
 
 		return window;
 	
