@@ -1,4 +1,4 @@
 # Intelli Type AI
 
-![Presentation prompt](./.readme/prompt.mp4)
+![Presentation prompt](./.readme/prompt.gif)
 
