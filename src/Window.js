@@ -31,12 +31,13 @@ function createWindow({_id, position, data})
 
 		window.loadFile(`./src/uxs/${_id}.html`);
 
+		window.focus();
+		window.maximize();
+		
 		if (data)
 		{
 			window.webContents.once('did-finish-load', () => {
 				window.webContents.send('onReady', data);
-				window.focus();
-				window.maximize();
 			});
 		}
 
