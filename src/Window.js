@@ -35,8 +35,11 @@ function createWindow({_id, position, data})
 		{
 			window.webContents.once('did-finish-load', () => {
 				window.webContents.send('onReady', data);
+				window.focus();
+				window.maximize();
 			});
 		}
+
 
 		return window;
 	
