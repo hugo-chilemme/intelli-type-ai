@@ -3,9 +3,8 @@ const { app, BrowserWindow, globalShortcut, screen, ipcMain } = require('electro
 const { exec } = require('child_process');
 require('dotenv').config()
 
+const ncp = require('copy-paste');
 const Window = require('./src/Window');
-
-console.log(process.env);
 
 let startTyping = false;
 let valueTyping = '';
@@ -17,6 +16,11 @@ ipcMain.handle('sentResearch', function (event, data) {
     return data;
 });
 
+ipcMain.on('close-prompt', function (event, data) {
+    const win = Window.getWindow('promptInput');
+    win.close();
+    return true;
+});
 
 async function handleStart()
 {
@@ -37,22 +41,24 @@ async function handleStart()
 			if (promptWindow) {
 				promptWindow.close();
 			}
-            exec('python3 ./worker.py', (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`Error executing worker.py: ${error}`);
+
+            exec(__dirname + '/src/exe/copyClipboard.exe', (err, stdout, stderr) => {
+                if (err) {
+                    console.error(err);
                     return;
                 }
-
-
-
+           
                 const position = screen.getCursorScreenPoint();
-                position.x += 30;
-                position.y += 80;
+                position.x = 0;
+                position.y = 0;
 
-                const win = Window.createWindow({ _id: 'promptInput', position});
+                const win = Window.createWindow({ _id: 'promptInput', position, data: { text: stdout.trim() } });
+
                 win.focus();
-
             });
+
+
+
 		}
 	});
 

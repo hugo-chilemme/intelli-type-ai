@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
 	<link defer="" href="https://fonts.googleapis.com/css2?family=Outfit&amp;display=swap" rel="stylesheet">
+	<link defer="" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">	
 	<link rel="stylesheet" type="text/css" href="./assets/styles/prompt.css">
 
   </head>
@@ -13,12 +14,23 @@
 
 	<div class="token" id="token">
 		<input type="text" id="input" placeholder="Enter your token">
-		<div class="btn-sent">
+		<div onclick="sent()" class="btn-sent">
 			<i class='bx bxs-send'></i>
 		</div>
 	</div>
 	<script>
 		const { ipcRenderer } = require('electron');
+
+		function sent() {
+			const input = document.getElementById('input');
+			const value = input.value;
+			if (!value || value.length !== 56 )
+			{
+				input.style.border = '1px solid red';
+			}
+
+			ipcRenderer.send('setToken', value);
+		}
 	</script>
 	<script src="./assets/scripts/token.js"></script>
   </body>
