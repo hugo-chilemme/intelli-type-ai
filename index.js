@@ -1,6 +1,11 @@
 const win = require('active-win');
 const { app, BrowserWindow, globalShortcut, screen, ipcMain } = require('electron');
 const { exec } = require('child_process');
+require('dotenv').config()
+
+const Window = require('./src/Window');
+
+console.log(process.env);
 
 let startTyping = false;
 let valueTyping = '';
@@ -13,44 +18,18 @@ ipcMain.handle('sentResearch', function (event, data) {
 });
 
 
-function createWindow({ x, y }) {
-    promptWindow = new BrowserWindow({
-        width: 375,
-        height: 70,
-        resizable: false, // Lock resize
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: false,
-        },
-        titleBarStyle: 'hidden',
-        borderRadius: '35px',
-        transparent: true,
-        alwaysOnTop: true,
-        // focusable: false,
-    });
+async function handleStart()
+{
 
+    if (process.env.CHATGPT_TOKEN === undefined)
+    {
 
-    promptWindow.setPosition(x - 30, y - 80);
+        return Window.createWindow({_id: 'tokenInput'});
 
-    promptWindow.loadFile('./src/uxs/index.html');
-
-    // promptWindow.openDevTools();
-
-    function closeWindow() {
-        startTyping = false;
-        valueTyping = '';
-        promptWindow.close();
     }
 
-    // promptWindow.on('blur', closeWindow);
 
-    globalShortcut.register('Esc', closeWindow);
-}
 
-console.log(global);
-app.whenReady().then(() => {
-	// Register global shortcut for Windows + C
 	globalShortcut.register('Super+C', async () => {
 		const activeWin = await win();
 
@@ -63,12 +42,17 @@ app.whenReady().then(() => {
                     console.error(`Error executing worker.py: ${error}`);
                     return;
                 }
-                console.log(`stdout: ${stdout}`);
-                console.error(`stderr: ${stderr}`);
-                createWindow(screen.getCursorScreenPoint());
+
+
+
+                const position = screen.getCursorScreenPoint();
+                position.x += 30;
+                position.y += 80;
+
+                const win = Window.createWindow({ _id: 'promptInput', position});
+                win.focus();
+
             });
-            
-			// Use the cursor position as needed
 		}
 	});
 
@@ -78,8 +62,12 @@ app.whenReady().then(() => {
 			createWindow();
 		}
 	});
-});
 
+}
+
+
+app.whenReady().then(handleStart);
+	
 // Quit app when all windows are closed
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
