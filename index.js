@@ -18,6 +18,12 @@ ipcMain.on('setToken', (event, token) => {
     fs.writeFileSync(path.join(__dirname, '.env'), `OPENAI_API_KEY=${token}`);
     require('dotenv').config();
     process.env.OPENAI_API_KEY = token;
+
+    const win = Window.getWindow('tokenInput');
+
+    handleStart();
+    win.close();
+
     // Continue with your application logic...
 });
 
@@ -31,7 +37,7 @@ ipcMain.on('sentResearch', async (event, data) => {
 
 ipcMain.on('close-prompt', function (event, data) {
     const win = Window.getWindow('promptInput');
-    win.close();
+    win.hide();
     return true;
 });
 
@@ -51,9 +57,6 @@ async function handleStart()
 		const activeWin = await win();
 
 		if (activeWin && activeWin.title !== 'intelli-type-ai') {
-			if (promptWindow) {
-				promptWindow.close();
-			}
 
             exec(__dirname + '/src/exe/copyClipboard.exe', (err, stdout, stderr) => {
                 if (err) {
@@ -65,12 +68,23 @@ async function handleStart()
                 position.x = 0;
                 position.y = 0;
 
-                const win = Window.createWindow({ _id: 'promptInput', position, data: { text: stdout.trim() } });
+
+                let win = Window.getWindow('promptInput');
+
+                if (win)
+                {
+                    win.show();
+                    win.focus();
+                    win.webContents.send('onReady', stdout.trim());
+                    return;
+                }
+
+                win = Window.createWindow({ _id: 'promptInput', position, data: { text: stdout.trim() } });
 
                 win.focus();
             });
 
-
+©
 
 		}
 	});
