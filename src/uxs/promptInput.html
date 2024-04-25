@@ -5,13 +5,33 @@
     <title>Hello World!</title>
 	<link defer="" href="https://fonts.googleapis.com/css2?family=Outfit&amp;display=swap" rel="stylesheet">
 	<link defer="" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">	
+	<link defer="" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="./assets/styles/prompt.css">
   </head>
 
   <style>
 
+	h2 {
+		font-size: 15px;
+		font-family: 'Roboto', sans-serif;
+		font-weight: 300;
+
+		span {
+			color: #999999;
+			margin-left: 15px;
+			padding-left: 15px;
+			font-weight: 200;
+			border-left: 2px solid #303030;
+		}
+	}
+	.contains {
+		height: 83%;
+	}
+
 	.conversations {
-		height: 100%;
+		height: 85%;
+		flex: 1;
+		padding-top: 25px;
 		overflow-y: auto;
 		display: flex;
 		flex-direction: column;
@@ -19,11 +39,11 @@
 		.conversation {
 			display: flex;
 			margin: 10px 0;
-			align-items: center;
-
+    		align-items: flex-end;
+			
 			.avatar {
-				width: 50px;
-				height: 50px;
+				width: 40px;
+				height: 40px;
 				border-radius: 50%;
 				overflow: hidden;
 				img {
@@ -33,17 +53,92 @@
 				}
 			}
 			.message {
-				background-color: #292929;
-				padding: 10px;
-				border-radius: 10px;
-				margin-left: 10px;
-				max-width: 70%;
-				word-wrap: break-word;
+				width: 100%;
+				max-width: 75%;
+				color: #808080;
+				margin-left: 20px;
+
+				h5 {
+					margin-bottom: 8px;
+					font-family: 'Roboto', sans-serif;
+					font-size: 10px;
+					margin-left: 10px;
+					font-weight: 300;
+					margin-top: -15px;
+				}
+
+				p {
+					color: #d4d4d5;
+					background-color: #000000;
+					padding: 12.5px 20px;
+					width: fit-content;
+					font-weight: 400;
+					border-radius:25px;
+					word-wrap: break-word;
+				}
+			}
+
+			&.right {
+				flex-direction: row-reverse;
+				.message {
+					margin-right: 20px;
+					margin-left: 0;
+					display:flex;
+					flex-direction: column;
+					align-items: flex-end;
+
+					h5 {
+						margin-left: 0;
+						margin-right: 10px;
+					}
+
+					p {
+						text-align: right;
+						background-color: var(--primary-background-color);
+						color: white;
+					}
+				}
 			}
 		
 		}
 	}
 
+
+	.suggester {
+		padding: 20px;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		column-gap: 10px;
+		height: 80px;
+
+
+		.suggestion {
+			border: 1px solid var(--primary-color);
+			padding: 10px 20px;
+			border-radius: 10px;
+			transition: 250ms;
+			
+			i {
+				margin-right: 10px;
+				transform: translateY(1px);
+			}
+			
+			p {
+				transition: 250ms;
+				color: var(--primary-color);
+			}
+
+			&:hover {
+				cursor: pointer;
+				background-color: var(--primary-color);
+				p {
+					color: white;
+				}
+			}
+		}
+	}
 
 
 
@@ -52,21 +147,36 @@
   <body class="promptInput">
 
 	<div class="container">
-		<div class="conversations">
-			<div class="conversation">
-				<div class="avatar">
-					<img src="https://picsum.photos/200" alt="avatar">
-				</div>
-				<div class="message">
-					<p id="preprompt"></p>
+		<h2>Intelli Type AI <span>New conversation</span></h2>
+		<div class="contains">
+			<div class="conversations">
+				<div class="conversation">
+					<div class="avatar">
+						<img src="https://picsum.photos/200" alt="avatar">
+					</div>
+					<div class="message">
+						<h5>Intelli Type AI</h5>
+						<p id="preprompt">Hello, my name is Intelli Type AI 🙂</p>
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="prompt" id="prompt">
-			<input type="text" id="input" placeholder="Ask intelligence what to do">
-			<div class="btn-sent" onclick="ask()">
-				<i class='bx bxs-send'></i>
+	
+			<div class="suggester">
+				<div class="suggestion">
+					<p><i class='bx bxs-magic-wand'></i> Correct my mistakes</p>
+				</div>
+				<div class="suggestion">
+					<p><i class='bx bxs-magic-wand'></i> Translate in English</p>
+				</div>
+				<div class="suggestion">
+					<p><i class='bx bxs-magic-wand'></i> Improve the style</p>
+				</div>
+			</div>
+			<div class="prompt" id="prompt">
+				<input type="text" id="input" placeholder="Ask intelligence what to do">
+				<div class="btn-sent" onclick="ask()">
+					<i class='bx bxs-send'></i>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -74,6 +184,7 @@
 	<script>
 		const { ipcRenderer } = require('electron');
 
+		const conversations = document.querySelector('.conversations');
 
 		document.querySelector('body').addEventListener('click', function(e) {
 			console.log(e.target.closest('.container'))
@@ -83,6 +194,35 @@
 				console.log('closed');
 			}
 		});
+
+
+		function addConversation(message, type) {
+			const conversation = document.createElement('div');
+			conversation.classList.add('conversation');
+			conversation.classList.add(type === 'user' ? 'right' : 'left');
+
+			const avatar = document.createElement('div');
+			avatar.classList.add('avatar');
+			avatar.innerHTML = `<img src="https://picsum.photos/200" alt="avatar">`;
+
+			const messageElement = document.createElement('div');
+			messageElement.classList.add('message');
+
+			const h5 = document.createElement('h5');
+			h5.textContent = type === 'user' ? 'You' : 'Intelli Type AI';
+
+			const p = document.createElement('p');
+			p.textContent = message;
+
+			messageElement.appendChild(h5);
+			messageElement.appendChild(p);
+
+			conversation.appendChild(avatar);
+			conversation.appendChild(messageElement);
+
+			conversations.appendChild(conversation);
+		}
+
 
 
 		ipcRenderer.on('onReady', function(event, data) {

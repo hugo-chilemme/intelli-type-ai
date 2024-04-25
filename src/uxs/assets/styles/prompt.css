@@ -1,13 +1,13 @@
 :root {
-	--primary-color: rgba(61, 87, 234, 1);
-	--primary-background-color: rgba(61, 87, 234, 0.10);
+	--primary-color: rgb(71, 120, 255);
+	--primary-background-color: rgba(54, 102, 235, 0.25);
 }
 body {
 	padding: 35px;
 	overflow: hidden;
 	display: flex;
 
-	background-color: rgba(19, 19, 19, 0.25);
+	background-color: rgba(19, 19, 19, 0);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	flex-direction: column;
@@ -23,7 +23,7 @@ body.promptInput {
 }
 
 .container {
-	background-color: #191919;
+	background-color: #131319;
 	border-radius: 25px;
 	padding: 35px;
 	border: 2px solid rgba(255, 255, 255, 0.1);
@@ -93,7 +93,7 @@ p {
 		cursor: pointer;
 		font-size: 14px;
 		font-weight: 700;
-		padding: 12.5px 20px;
+		padding: 14px 30px;
 		text-transform: uppercase;
 		transition: background-color 0.2s;
 		border-radius: 50px;
@@ -118,16 +118,18 @@ p {
 	margin-top: 25px;
 }
 .prompt {
-	background-color: #121212;
+	background-color: #000000;
+	margin: 0 20px;
+	width: calc(100% - 40px);
 
 }
 .prompt input {
 	border:none;
 	width: 100%;
 	font-weight:300;
-	height: 40px;
-	padding: 12.5px 20px;
-	color: white;
+	padding: 15px 20px;
+	color: #d4d4d5;
+
 	outline: none;
 	background-color: transparent;
 
